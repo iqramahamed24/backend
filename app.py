@@ -6,9 +6,11 @@ from models import db,User
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
 migrate = Migrate(app,db)
+
+db.init_app(app)
 
 @app.route('/')
 def home():
@@ -18,3 +20,8 @@ def home():
 def users():
    users = User.query.all()
    print(users)
+   return []
+   
+if __name__ == '__main__':
+  app.run()
+

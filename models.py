@@ -1,6 +1,6 @@
 # This is the schema of our database --> In our database we shall have four models/tables
 
-from flask_sqlalchemy import SQLALCHEMY
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -14,9 +14,9 @@ convention = {
 }
 
 
-metadata = MetaData(metadata=convention)
+metadata = MetaData(naming_convention=convention)
 
-db = SQLALCHEMY(metadata=metadata)
+db = SQLAlchemy(metadata=metadata)
 
 
 
@@ -28,7 +28,7 @@ class User(db.Model, SerializerMixin):
 
     # This are the columns in our database
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text, nullable=False)
+    user_name = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     phone_number = db.Column(db.String, nullable=False, unique=True)
     created_at = db.Column(db.TIMESTAMP)
