@@ -1,8 +1,8 @@
 # This are the views or what the end user will see
-from flask import Flask
+from flask import Flask,make_response,request
 from flask_migrate import Migrate
 
-from models import db, User
+from models import db, User,Income,Budget,Expense
 
 app = Flask(__name__)
 
@@ -27,6 +27,21 @@ def users():
         users_list.append(user.to_dict())
     print(users_list)
     return []
+
+@app.route('/incomes')
+def income():
+    income = Income.query.all()
+    print(income)
+
+@app.route('/budgets')
+def budget():
+    budget = Budget.query.all()
+    print(budget)
+    
+@app.route('/expenses')
+def expense():
+    expense = Expense.query.all()
+    print(expense)
 
 
 if __name__ == '__main__':
