@@ -49,6 +49,22 @@ class Income(db.Model, SerializerMixin):
 
     # Relationships
     user = db.relationship("User", back_populates="income")
+    budget = db.relationship("Budget", back_populates="money")
+
+
+class Budget(db.Model, SerializerMixin):
+
+    # This will be the table to stores the user's budget
+    __tablename__ = "budgets"
+
+    # This will be the columns in pur database
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Integer, nullable=False)
+    balance = db.Column(db.Integer)
+
+    # Relationship
+    money = db.relationship("Income", back_populates="budget")
+    to_spend = db.relationship("Expense", back_populates="spending")
 
 
 class Expense(db.Model, SerializerMixin):
@@ -63,13 +79,5 @@ class Expense(db.Model, SerializerMixin):
     description = db.Column(db.Integer)
     created_at = db.Column(db.TIMESTAMP)
 
-
-class Budget(db.Model, SerializerMixin):
-
-    # This will be the table to stores the user's budget
-    __tablename__ = "budgets"
-
-    # This will be the columns in pur database
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Integer, nullable=False)
-    balance = db.Column(db.Integer)
+    # Relationship
+    spending = db.relationship("Budget", back_populates="to_spend")
