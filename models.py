@@ -19,7 +19,6 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
 
-
 # Models
 class User(db.Model, SerializerMixin):
 
@@ -31,38 +30,46 @@ class User(db.Model, SerializerMixin):
     user_name = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     phone_number = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
     created_at = db.Column(db.TIMESTAMP)
-    
-class Expense(db.Model,SerializerMixin):
 
-    #This is the table to store our expenses
+    # Relationships
+    income = db.relationship("Income", back_populates="user")
+
+
+class Income(db.Model, SerializerMixin):
+
+    # This will store the income of our users
+    __tablename__ = 'incomes'
+
+    # This will be the columns in our database
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.TIMESTAMP)
+
+    # Relationships
+    user = db.relationship("User", back_populates="income")
+
+
+class Expense(db.Model, SerializerMixin):
+
+    # This is the table to store our expenses
     __tablename__ = "expenses"
-    
-    #This  will be the columns in our database
-    id = db.Column(db.Integer,primary_key=True)
+
+    # This  will be the columns in our database
+    id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer)
     category = db.Column(db.Integer)
     description = db.Column(db.Integer)
     created_at = db.Column(db.TIMESTAMP)
-    
 
-class Budget(db.Model,SerializerMixin):
 
-    #This will be the table to stores the user's budget
+class Budget(db.Model, SerializerMixin):
+
+    # This will be the table to stores the user's budget
     __tablename__ = "budgets"
-    
-    #This will be the columns in pur database
-    id = db.Column(db.Integer,primary_key=True)
-    amount = db.Column(db.Integer,nullable=False)
-    balance = db.Column(db.Integer)
-    
-class Income(db.Model,SerializerMixin):
 
-    #This will store the income of our users
-    __tablename__ = 'incomes'
-    
-    #This will be the columns in our database
-    id = db.Column(db.Integer,primary_key=True)
-    amount = db.Column(db.Integer,nullable=False)
-    date = db.Column(db.TIMESTAMP)
-    
+    # This will be the columns in pur database
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Integer, nullable=False)
+    balance = db.Column(db.Integer)
