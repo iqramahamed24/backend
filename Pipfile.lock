@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "048902e1a2d3ab14858a988ec2c1549ae83736063cb3c7f8b9bc24712b5f7521"
+            "sha256": "7ca7dd41c96a9cb040b5d2a509b7f76c409f35622c396ab9aa1d43949c75568b"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.12"
+            "python_version": "3.10.12"
         },
         "sources": [
             {
@@ -142,7 +142,7 @@
                 "sha256:fd096eb7ffef17c456cfa587523c5f92321ae02427ff955bebe9e3c63bc9f0da",
                 "sha256:fe754d231288e1e64323cfad462fcee8f0288654c10bdf4f603a39ed923bef33"
             ],
-            "markers": "platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
+            "markers": "python_version < '3.13' and platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
             "version": "==3.0.3"
         },
         "itsdangerous": {
