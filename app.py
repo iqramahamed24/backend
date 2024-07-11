@@ -2,7 +2,7 @@
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from datetime import datetime
-from functools import wraps
+# from functools import wraps
 
 from models import db, User, Expense, Budget
 
@@ -53,7 +53,7 @@ def users():
 @app.route('/register', methods = ['POST'])
 def register():
     data = request.get_json()
-    new_user = User(user_name = data['user_name'], email = data['email'], created_at = datetime.now())
+    new_user = User(user_name = data['user_name'], email = data['email'],password=data['password'])
 
     db.session.add(new_user)
     db.session.commit()
@@ -62,27 +62,27 @@ def register():
 
 
 # Login User
-app.route('/login', methods = ['POST'])
-def login():
-    data = request.get_json()
-    user = User.query.filter_by(email = data['email']).first()
-    if user and user.verify_password(data['password']):
-        token = user.generate_auth_token()
-        return jsonify({'token': token}), 200
-    return jsonify({'message': 'Invalid credentials'}), 401
-
-
-
-# # Add Expense
-# @app.route('/expenses', methods = ['POST'])
-# # @token_required
-# def add_expense(current_user):
+# app.route('/login', methods = ['POST'])
+# def login():
 #     data = request.get_json()
-#     new_expense = Expense(amount = data['amount'], category = data['category'], description = data['description'], created_at = datetime.now(), user_id = current_user.id)
+#     user = User.query.filter_by(email = data['email']).first()
+#     if user and user.verify_password(data['password']):
+#         token = user.generate_auth_token()
+#         return jsonify({'token': token}), 200
+#     return jsonify({'message': 'Invalid credentials'}), 401
 
-#     db.session.add(new_expense)
-#     db.session.commit()
-#     return jsonify(new_expense.to_dict()), 201
+
+
+# Add Expense
+@app.route('/expenses', methods = ['POST'])
+# @token_required
+def add_expense():
+    data = request.get_json()
+    new_expense = Expense(amount = data['amount'], category = data['category'], description = data['description'], created_at = datetime.now())
+
+    db.session.add(new_expense)
+    db.session.commit()
+    return jsonify(new_expense.to_dict()), 201
 
 
 

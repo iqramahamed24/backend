@@ -19,7 +19,6 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
 
-
 # Models
 class User(db.Model, SerializerMixin):
 
@@ -30,39 +29,73 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.Text, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
-    phone_number = db.Column(db.String, nullable=False, unique=True)
-    created_at = db.Column(db.TIMESTAMP)
-    
-class Expense(db.Model,SerializerMixin):
+    password = db.Column(db.String, nullable=False)
 
-    #This is the table to store our expenses
-    __tablename__ = "expenses"
-    
-    #This  will be the columns in our database
-    id = db.Column(db.Integer,primary_key=True)
-    amount = db.Column(db.Integer)
-    category = db.Column(db.Integer)
-    description = db.Column(db.Integer)
-    created_at = db.Column(db.TIMESTAMP)
-    
+    # Relationships
+    income = db.relationship("Income", back_populates="user")
+    expenses = db.relationship("Expense", back_populates="user")
 
-class Budget(db.Model,SerializerMixin):
+    # Serialize rules
+    serialize_rules = ('-income.user','-expenses.user')
+    # serialize_only = ('user_name', 'email')
 
-    #This will be the table to stores the user's budget
-    __tablename__ = "budgets"
-    
-    #This will be the columns in pur database
-    id = db.Column(db.Integer,primary_key=True)
-    amount = db.Column(db.Integer,nullable=False)
-    balance = db.Column(db.Integer)
-    
-class Income(db.Model,SerializerMixin):
 
-    #This will store the income of our users
+class Income(db.Model, SerializerMixin):
+
+    # This will store the income of our users
     __tablename__ = 'incomes'
-    
-    #This will be the columns in our database
-    id = db.Column(db.Integer,primary_key=True)
-    amount = db.Column(db.Integer,nullable=False)
+
+    # This will be the columns in our database
+    id = db.Column(db.Integer, primary_key=True)
+    # This  will keep track of the income of our user
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    amount = db.Column(db.Integer, nullable=False)
     date = db.Column(db.TIMESTAMP)
+    budget_id = db.Column(db.Integer, db.ForeignKey("budgets.id"))
+
+    # Relationships
+    user = db.relationship("User", back_populates="income")
+    budget = db.relationship("Budget", back_populates="money")
     
+    #Serialize rules
+    serialize_rules = ('-user.income','-budget.money')
+
+
+class Budget(db.Model, SerializerMixin):
+
+    # This will be the table to stores the user's budget
+    __tablename__ = "budgets"
+
+    # This will be the columns in pur database
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+
+    # Relationship
+    money = db.relationship("Income", back_populates="budget")
+    to_spend = db.relationship("Expense", back_populates="spending")
+    
+    #Serialize rules
+    serialize_rules = ('-money.budget','-to_spend.spending')
+
+
+class Expense(db.Model, SerializerMixin):
+
+    # This is the table to store our expenses
+    __tablename__ = "expenses"
+
+    # This  will be the columns in our database
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    amount = db.Column(db.Integer)
+    category = db.Column(db.String)
+    description = db.Column(db.String)
+    created_at = db.Column(db.TIMESTAMP)
+    budget_id = db.Column(db.Integer, db.ForeignKey("budgets.id"))
+
+    # Relationship
+    user = db.relationship("User", back_populates="expenses")
+    spending = db.relationship("Budget", back_populates="to_spend")
+    
+    #Serialize rules
+    serialize_rules = ('-user.expenses','-spending.to_spend')
