@@ -87,44 +87,49 @@ def add_expense():
 
 
 
-# # Get Expenses
-# @app.route('/expenses', methods = ['GET'])
-# # @token_required
-# def get_expenses(current_user):
-#     expenses = Expense.query.filter_by(user_id = current_user.id).all()
+# Get Expenses
+@app.route('/expenses', methods = ['GET'])
+# @token_required
+def get_expenses():
+    expenses = Expense.query.all()
 
-#     return jsonify([expense.to_dict() for expense in expenses]), 200
+    return jsonify([expense.to_dict() for expense in expenses]), 200
 
 
 
-# # Update Expense
-# @app.route('/expenses/int:id>', methods = ['PATCH'])
-# # @token_required
-# def update_expense(current_user, id):
-#     expense = Expense.query.get(id)
-#     if not expense or expense.user_id != current_user.id:
-#         return jsonify({'message': 'Expense not found'}), 400
+# Update Expense
+@app.route('/expenses/<int:id>', methods = ['PATCH'])
+# @token_required
+def update_expense(id):
+    expense = Expense.query.get(id)
+    if  expense ==None:
+        return jsonify({'message': 'Expense not found'}), 400
     
-#     data = request.get_json()
-#     expense.amount = data['amount']
-#     expense.category = data['category']
-#     expense.description = data['description']
-#     db.session.commit()
-#     return jsonify(expense.to_dict()), 200
+    data = request.get_json()
+    expense.amount = data['amount']
+    expense.category = data['category']
+    expense.description = data['description']
+    db.session.commit()
+    return jsonify(expense.to_dict()), 200
 
 
 
 # Delete Expense
-# @app.route('/expenses', methods = ['DELETE'])
+@app.route('/expenses/<int:id>', methods = ['DELETE'])
 # # @token_required
-# def delete_expense():
-#     expense = Expense.query.get(id)
-#     # if not expense or expense.user_id != current_user.id:
-#     #     return jsonify({'message': 'Expense not found'}), 404
-#     db.session.delete(expense)
-#     db.session.commit()
-#     print("deleted successfully")
-#     return '', 204
+def delete_expense(id):
+    expense = Expense.query.filter_by(id = id).first()
+    if expense == None:
+        return jsonify({"message": "Expense not found"}), 404
+    
+    db.session.delete(expense)
+    db.session.commit()
+    print("Deleted successfully")
+    return []
+
+
+
+
 
 
 
@@ -146,29 +151,30 @@ def add_budget():
 
 
 
-# # Get Budgets
-# @app.route('/budgets', methods = ['GET'])
-# # @token_required
-# def get_budgets():
-#     budgets = Budget.query.all()
+# Get Budgets
+@app.route('/budgets', methods = ['GET'])
+# @token_required
+def get_budgets():
+    budgets = Budget.query.all()
 
-#     return jsonify([budget.to_dict() for budget in budgets]), 200
+    return jsonify([budget.to_dict() for budget in budgets]), 200
 
 
 
-# # Update Budget
-# @app.route('/budgets/<int:id>', methods = ['PATCH'])
-# # @token_required
-# def update_budget(current_user, id):
-#     budget = Budget.query.get(id)
-#     if not budget or budget.user_id != current_user.id:
-#         return jsonify({'message', 'Budget not found'}), 404
+# Update Budget
+@app.route('/budgets/<int:id>', methods = ['PATCH'])
+# @token_required
+def update_budget(id):
+    budget = Budget.query.get(id)
+    if budget ==None:
+        return jsonify({'message', 'Budget not found'}), 404
     
-#     data = request.get_json()
-#     budget.amount = data['amount']
-#     budget.balance = data['balance']
-#     db.session.commit()
-#     return jsonify(budget.to_dict()), 200
+    data = request.get_json()
+    budget.amount = data['amount']
+    budget.category = data['category']
+    budget.description = data['description']
+    db.session.commit()
+    return jsonify(budget.to_dict()), 200
 
 
 
