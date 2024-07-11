@@ -1,8 +1,10 @@
 # This are the views or what the end user will see
-from flask import Flask,make_response,request
+from flask import Flask
 from flask_migrate import Migrate
+from datetime import datetime
+# from functools import wraps
 
-from models import db, User,Income,Budget,Expense
+from models import db, User
 
 app = Flask(__name__)
 
@@ -18,6 +20,23 @@ def home():
     return '<h1>Manage your funds more easily</h1>'
 
 
+# def token_required(f):
+#     @wraps(f)
+#     def decorated(*args, **kwargs):
+#         token = None
+#         if 'Authorization' in request.headers:
+#             token = request.headers['Authorization'].split(" ")[1]
+#         if not token:
+#             return jsonify({'message': 'Token is missing!'}), 401
+#         try:
+#             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+#             current_user = User.query.filter_by(id=data['user_id']).first()
+#         except:
+#             return jsonify({'message': 'Token is invalid!'}), 401
+#         return f(current_user, *args, **kwargs)
+#     return decorated
+
+
 @app.route('/users')
 def users():
 
@@ -27,21 +46,6 @@ def users():
         users_list.append(user.to_dict())
     print(users_list)
     return []
-
-@app.route('/incomes')
-def income():
-    income = Income.query.all()
-    print(income)
-
-@app.route('/budgets')
-def budget():
-    budget = Budget.query.all()
-    print(budget)
-    
-@app.route('/expenses')
-def expense():
-    expense = Expense.query.all()
-    print(expense)
 
 
 if __name__ == '__main__':

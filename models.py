@@ -33,7 +33,12 @@ class User(db.Model, SerializerMixin):
 
     # Relationships
     income = db.relationship("Income", back_populates="user")
-    expenses = db.relationship("Expense",back_populates="user")
+    expenses = db.relationship("Expense", back_populates="user")
+
+    # Serialize rules
+    serialize_rules = ('-income.user','-expenses.user')
+    # serialize_only = ('user_name', 'email')
+
 
 class Income(db.Model, SerializerMixin):
 
@@ -42,15 +47,18 @@ class Income(db.Model, SerializerMixin):
 
     # This will be the columns in our database
     id = db.Column(db.Integer, primary_key=True)
-    #This  will keep track of the income of our user
+    # This  will keep track of the income of our user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     amount = db.Column(db.Integer, nullable=False)
     date = db.Column(db.TIMESTAMP)
-    budget_id = db.Column(db.Integer,db.ForeignKey("budgets.id"))
+    budget_id = db.Column(db.Integer, db.ForeignKey("budgets.id"))
 
     # Relationships
     user = db.relationship("User", back_populates="income")
     budget = db.relationship("Budget", back_populates="money")
+    
+    #Serialize rules
+    serialize_rules = ('-user.income','-budget.money')
 
 
 class Budget(db.Model, SerializerMixin):
@@ -66,6 +74,9 @@ class Budget(db.Model, SerializerMixin):
     # Relationship
     money = db.relationship("Income", back_populates="budget")
     to_spend = db.relationship("Expense", back_populates="spending")
+    
+    #Serialize rules
+    serialize_rules = ('-money.budget','-to_spend.spending')
 
 
 class Expense(db.Model, SerializerMixin):
@@ -80,8 +91,11 @@ class Expense(db.Model, SerializerMixin):
     category = db.Column(db.String)
     description = db.Column(db.String)
     created_at = db.Column(db.TIMESTAMP)
-    budget_id = db.Column(db.Integer,db.ForeignKey("budgets.id"))
+    budget_id = db.Column(db.Integer, db.ForeignKey("budgets.id"))
 
     # Relationship
-    user = db.relationship("User",back_populates="expenses")
+    user = db.relationship("User", back_populates="expenses")
     spending = db.relationship("Budget", back_populates="to_spend")
+    
+    #Serialize rules
+    serialize_rules = ('-user.expenses','-spending.to_spend')
