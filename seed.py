@@ -1,8 +1,7 @@
 # For our dummy data when testing out our application
 from datetime import datetime
 from app import app
-from models import db, User, Income
-
+from models import db, User,Income
 with app.app_context():
     print("Inputting data")
     User.query.delete()
@@ -13,12 +12,12 @@ with app.app_context():
     # To append our new users to this empty array
     new_user = []
 
-    charles = User(user_name="Charles Kibet", email="charles@gmail.com",
-                   created_at=datetime.now())
+    charles = User(user_name="Charles Kibet", email="charles@gmail.com",password="charles"
+                  )
     new_user.append(charles)
 
-    guido = User(user_name="Guido Python", email="guido@gmail.com",
-                 created_at=datetime.now())
+    guido = User(user_name="Guido Python", email="guido@gmail.com",password="charles"
+                 )
     new_user.append(guido)
 
     db.session.add_all(new_user)

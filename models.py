@@ -33,7 +33,7 @@ class User(db.Model, SerializerMixin):
 
     # Relationships
     income = db.relationship("Income", back_populates="user")
-
+    expenses = db.relationship("Expense",back_populates="user")
 
 class Income(db.Model, SerializerMixin):
 
@@ -42,9 +42,11 @@ class Income(db.Model, SerializerMixin):
 
     # This will be the columns in our database
     id = db.Column(db.Integer, primary_key=True)
+    #This  will keep track of the income of our user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     amount = db.Column(db.Integer, nullable=False)
     date = db.Column(db.TIMESTAMP)
+    budget_id = db.Column(db.Integer,db.ForeignKey("budgets.id"))
 
     # Relationships
     user = db.relationship("User", back_populates="income")
@@ -59,7 +61,7 @@ class Budget(db.Model, SerializerMixin):
     # This will be the columns in pur database
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False)
-    description = db.Column(db.Text,nullable=False)
+    description = db.Column(db.Text, nullable=False)
 
     # Relationship
     money = db.relationship("Income", back_populates="budget")
@@ -75,9 +77,11 @@ class Expense(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     amount = db.Column(db.Integer)
-    category = db.Column(db.Integer)
-    description = db.Column(db.Integer)
+    category = db.Column(db.String)
+    description = db.Column(db.String)
     created_at = db.Column(db.TIMESTAMP)
+    budget_id = db.Column(db.Integer,db.ForeignKey("budgets.id"))
 
     # Relationship
+    user = db.relationship("User",back_populates="expenses")
     spending = db.relationship("Budget", back_populates="to_spend")
