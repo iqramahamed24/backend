@@ -32,16 +32,19 @@ def users():
 def income():
     income = Income.query.all()
     print(income)
+    return []
 
 @app.route('/budgets')
 def budget():
     budget = Budget.query.all()
     print(budget)
+    return []
     
 @app.route('/expenses')
 def expense():
-    expense = Expense.query.all()
-    print(expense)
+    expenses = Expense.query.all()
+    print(expenses)
+    return []
 
 
 if __name__ == '__main__':
