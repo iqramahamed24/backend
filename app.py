@@ -114,33 +114,34 @@ def add_expense():
 
 
 
-# # Delete Expense
-# @app.route('/expenses/<int:id>', methods = ['DELETE'])
+# Delete Expense
+# @app.route('/expenses', methods = ['DELETE'])
 # # @token_required
-# def delete_expense(current_user, id):
+# def delete_expense():
 #     expense = Expense.query.get(id)
-#     if not expense or expense.user_id != current_user.id:
-#         return jsonify({'message': 'Expense not found'}), 404
+#     # if not expense or expense.user_id != current_user.id:
+#     #     return jsonify({'message': 'Expense not found'}), 404
 #     db.session.delete(expense)
 #     db.session.commit()
+#     print("deleted successfully")
 #     return '', 204
 
 
 
 
-# # Add Budget
-# @app.route('/budgets', methods = '[POST]')
-# # @token_required
-# def add_budget(current_user):
-#     data = request.get_json()
-#     new_budget = Budget(
-#         amount = data['amount'],
-#         balance = data['balance'],
-#         created_at = datetime.now()
-#     )
-#     db.session.add(new_budget)
-#     db.session.commit()
-#     return jsonify(new_budget.to_dict()), 201
+# Add Budget
+@app.route('/budgets', methods = ['POST'])
+# @token_required
+def add_budget():
+    data = request.get_json()
+    new_budget = Budget(
+        amount = data['amount'],
+        description = data['description']
+        
+    )
+    db.session.add(new_budget)
+    db.session.commit()
+    return jsonify(new_budget.to_dict()), 201
 
 
 
@@ -148,8 +149,8 @@ def add_expense():
 # # Get Budgets
 # @app.route('/budgets', methods = ['GET'])
 # # @token_required
-# def get_budgets(current_user):
-#     budgets = Budget.query.filter_by(user_id = current_user.id).all()
+# def get_budgets():
+#     budgets = Budget.query.all()
 
 #     return jsonify([budget.to_dict() for budget in budgets]), 200
 
@@ -172,17 +173,18 @@ def add_expense():
 
 
 
-# # Delete Budget
-# @app.route('/budgets/int:id', methods = ['DELETE'])
-# # @token_required
-# def delete_budget(current_user, id):
-#     budget = Budget.query.get(id)
-#     if not budget or budget.user_id != current_user.id:
-#         return jsonify({'message': "Budget not found"}), 404
+# Delete Budget
+@app.route('/budgets/<int:id>', methods = ['DELETE'])
+# @token_required
+def delete_budget(id):
+    budget = Budget.query.filter_by(id=id).first()
+    if  budget ==None:
+        return jsonify({'message': "Budget not found"}), 404
     
-#     db.session.delete(budget)
-#     db.session.commit()
-#     return '', 204
+    db.session.delete(budget)
+    db.session.commit()
+    print('Deleted successfully')
+    return []
 
 
 
