@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
+from flask_bcrypt import check_password_hash
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -36,8 +37,11 @@ class User(db.Model, SerializerMixin):
     expenses = db.relationship("Expense", back_populates="user")
 
     # Serialize rules
-    serialize_rules = ('-income.user','-expenses.user','-password')
+    serialize_rules = ('-income.user', '-expenses.user', '-password')
     # serialize_only = ('user_name', 'email')
+
+    def check_password(self, plain_password):
+        return check_password_hash(self.password, plain_password)
 
 
 class Income(db.Model, SerializerMixin):
@@ -56,9 +60,9 @@ class Income(db.Model, SerializerMixin):
     # Relationships
     user = db.relationship("User", back_populates="income")
     budget = db.relationship("Budget", back_populates="money")
-    
-    #Serialize rules
-    serialize_rules = ('-user.income','-budget.money')
+
+    # Serialize rules
+    serialize_rules = ('-user.income', '-budget.money')
 
 
 class Budget(db.Model, SerializerMixin):
@@ -74,9 +78,9 @@ class Budget(db.Model, SerializerMixin):
     # Relationship
     money = db.relationship("Income", back_populates="budget")
     to_spend = db.relationship("Expense", back_populates="spending")
-    
-    #Serialize rules
-    serialize_rules = ('-money.budget','-to_spend.spending')
+
+    # Serialize rules
+    serialize_rules = ('-money.budget', '-to_spend.spending')
 
 
 class Expense(db.Model, SerializerMixin):
@@ -96,6 +100,6 @@ class Expense(db.Model, SerializerMixin):
     # Relationship
     user = db.relationship("User", back_populates="expenses")
     spending = db.relationship("Budget", back_populates="to_spend")
-    
-    #Serialize rules
-    serialize_rules = ('-user.expenses','-spending.to_spend')
+
+    # Serialize rules
+    serialize_rules = ('-user.expenses', '-spending.to_spend')
