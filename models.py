@@ -36,7 +36,7 @@ class User(db.Model, SerializerMixin):
     expenses = db.relationship("Expense", back_populates="user")
 
     # Serialize rules
-    serialize_rules = ('-income.user','-expenses.user')
+    serialize_rules = ('-income.user','-expenses.user','-password')
     # serialize_only = ('user_name', 'email')
 
 

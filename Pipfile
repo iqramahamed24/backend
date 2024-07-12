@@ -9,6 +9,9 @@ sqlalchemy = "*"
 flask-migrate = "*"
 sqlalchemy-serializer = "*"
 flask-restful = "*"
+install = "*"
+flask-bcrypt = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 
