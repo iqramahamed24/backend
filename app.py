@@ -2,7 +2,6 @@
 import os
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
-from datetime import datetime
 from flask_restful import Resource, Api
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
@@ -48,17 +47,6 @@ def users():
     print(users_list)
     return []
 
-# Add Expense
-@app.route('/expenses', methods=['POST'])
-def add_expense():
-    data = request.get_json()
-    new_expense = Expense(amount=data['amount'], category=data['category'],
-                          description=data['description'], created_at=datetime.now())
-
-    db.session.add(new_expense)
-    db.session.commit()
-    return jsonify(new_expense.to_dict()), 201
-
 # Update Expense
 @app.route('/expenses/<int:id>', methods=['PATCH'])
 # @token_required
@@ -73,21 +61,6 @@ def update_expense(id):
     expense.description = data['description']
     db.session.commit()
     return jsonify(expense.to_dict()), 200
-
-
-# Delete Expense
-@app.route('/expenses/<int:id>', methods=['DELETE'])
-# # @token_required
-def delete_expense(id):
-    expense = Expense.query.filter_by(id=id).first()
-    if expense == None:
-        return jsonify({"message": "Expense not found"}), 404
-
-    db.session.delete(expense)
-    db.session.commit()
-    print("Deleted successfully")
-    return []
-
 
 # Add Budget
 @app.route('/budgets', methods=['POST'])
