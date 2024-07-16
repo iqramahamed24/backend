@@ -2,7 +2,7 @@
 import os
 from flask import Flask
 from flask_migrate import Migrate
-from flask_restful import  Api
+from flask_restful import Api
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
@@ -11,7 +11,7 @@ from models import db
 from resources.user import Register, Login
 from resources.expense import ExpenseResource
 from resources.budget import BudgetResource
-
+from resources.income import IncomeResource
 app = Flask(__name__)
 api = Api(app)
 
@@ -33,6 +33,7 @@ jwt = JWTManager(app)
 # Set up of views
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
+api.add_resource(IncomeResource, '/income')
 api.add_resource(ExpenseResource, '/expenses')
 api.add_resource(BudgetResource, '/budgets')
 
