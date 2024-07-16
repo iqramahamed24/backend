@@ -42,7 +42,7 @@ class ExpenseResource(Resource):
         if expense == None:
             return {"message": "Expense not found"}, 404
 
-        db.session(expense)
+        db.session.delete(expense)
         db.commit()
         print("Expenses successfully")
         return []
