@@ -22,7 +22,20 @@ class IncomeResource(Resource):
         db.session.commit()
         return new_income.to_dict(), 201
 
-  # The user can delete the income 
+    # Update the expense
+    def update(self, id):
+        income = Income.query.get(id)
+        if income == None:
+            return {'message': 'Income not found'}, 400
+
+        data = request.get_json()
+        income.source = data['source']
+        income.amount = data['amount']
+
+        db.session.commit()
+        return income.to_dict(), 200
+
+  # The user can delete the income
     def delete(self, id):
         income = Income.query.filter_by(id == id).first()
 
@@ -33,4 +46,3 @@ class IncomeResource(Resource):
         db.commit()
         print("Expenses successfully")
         return []
-

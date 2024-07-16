@@ -33,7 +33,7 @@ jwt = JWTManager(app)
 # Set up of views
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
-api.add_resource(IncomeResource, '/income')
+api.add_resource(IncomeResource, '/incomes', '/incomes/<int:id>')
 api.add_resource(ExpenseResource, '/expenses')
 api.add_resource(BudgetResource, '/budgets')
 
