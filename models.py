@@ -53,6 +53,7 @@ class Income(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     # This  will keep track of the income of our user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    source = db.Column(db.Text)
     amount = db.Column(db.Integer, nullable=False)
     date = db.Column(db.TIMESTAMP)
     budget_id = db.Column(db.Integer, db.ForeignKey("budgets.id"))
@@ -72,6 +73,7 @@ class Budget(db.Model, SerializerMixin):
 
     # This will be the columns in pur database
     id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.TIMESTAMP)
     amount = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text, nullable=False)
 
