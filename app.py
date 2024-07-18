@@ -1,4 +1,5 @@
 # This are the views or what the end user will see
+
 import os
 from flask import Flask
 from flask_migrate import Migrate
@@ -12,6 +13,7 @@ from resources.user import Register, Login
 from resources.expense import ExpenseResource
 from resources.budget import BudgetResource
 from resources.income import IncomeResource
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -29,6 +31,7 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 
 jwt = JWTManager(app)
+
 
 # Set up of views
 api.add_resource(Register, '/register')
