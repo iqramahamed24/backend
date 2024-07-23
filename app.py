@@ -17,8 +17,8 @@ from resources.income import IncomeResource
 app = Flask(__name__)
 api = Api(app)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_ECHO'] = True
 
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
@@ -35,11 +35,12 @@ jwt = JWTManager(app)
 
 
 # Set up of views
+
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
 api.add_resource(IncomeResource, '/incomes', '/incomes/<int:id>')
-api.add_resource(ExpenseResource, '/expenses')
-api.add_resource(BudgetResource, '/budgets')
+api.add_resource(ExpenseResource, '/expenses', '/expenses/<int:id>')
+api.add_resource(BudgetResource, '/budgets', '/budgets/<int:id>')
 
 
 if __name__ == '__main__':

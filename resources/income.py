@@ -36,13 +36,13 @@ class IncomeResource(Resource):
         return income.to_dict(), 200
 
   # The user can delete the income
-    def delete(self, id):
-        income = Income.query.filter_by(id == id).first()
-
+    def delete(id):
+        income = Income.query.get(id)
         if income == None:
-            return {"message": "Expense not found"}, 404
+            return {'message': "Income not found"}, 404
 
         db.session.delete(income)
-        db.commit()
-        print("Expenses successfully")
+        db.session.commit()
+        print('Deleted successfully')
         return []
+
